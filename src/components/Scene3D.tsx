@@ -1,165 +1,95 @@
 "use client";
 
-// Original Spline-style 3D scene, built with three.js / react-three-fiber.
-// A glass "AI core" with an iridescent knot inside, orbited by glossy spheres.
+// A small ceramic still life: plinth, sphere, column, ring and one orange marker.
+// Matte materials, soft daylight, slow drift. Built with react-three-fiber.
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import {
-  ContactShadows,
-  Environment,
-  Float,
-  Lightformer,
-  MeshTransmissionMaterial,
-} from "@react-three/drei";
-import { useRef, useState } from "react";
-import { Color, type Group, type Mesh } from "three";
+import { ContactShadows, Environment, Lightformer, RoundedBox } from "@react-three/drei";
+import { useRef } from "react";
+import type { Group } from "three";
 
-const BG = new Color("#f3f3f7");
+const CLAY = { color: "#ebe8e2", roughness: 0.82, metalness: 0 };
+const CLAY_DARK = { color: "#d9d5cc", roughness: 0.85, metalness: 0 };
 
-function Core({ lite }: { lite: boolean }) {
-  const knot = useRef<Mesh>(null);
-  useFrame((_, dt) => {
-    if (!knot.current) return;
-    knot.current.rotation.x += dt * 0.25;
-    knot.current.rotation.y += dt * 0.35;
-  });
-
-  return (
-    <Float speed={1.4} rotationIntensity={0.4} floatIntensity={0.8}>
-      {/* glass shell */}
-      <mesh>
-        <sphereGeometry args={[1.45, 96, 96]} />
-        {lite ? (
-          <meshPhysicalMaterial
-            transmission={1}
-            thickness={0.6}
-            roughness={0.05}
-            ior={1.3}
-            clearcoat={1}
-            color="#ffffff"
-            attenuationColor="#dfe6ff"
-            attenuationDistance={2}
-          />
-        ) : (
-          <MeshTransmissionMaterial
-            samples={6}
-            resolution={512}
-            thickness={0.55}
-            roughness={0.04}
-            chromaticAberration={0.08}
-            anisotropy={0.2}
-            distortion={0.25}
-            distortionScale={0.4}
-            temporalDistortion={0.08}
-            ior={1.25}
-            color="#ffffff"
-            backside={false}
-            background={BG}
-          />
-        )}
-      </mesh>
-
-      {/* iridescent heart */}
-      <mesh ref={knot} scale={0.52}>
-        <torusKnotGeometry args={[1, 0.34, 220, 32, 2, 3]} />
-        <meshPhysicalMaterial
-          color="#5b6cff"
-          metalness={0.35}
-          roughness={0.12}
-          clearcoat={1}
-          clearcoatRoughness={0.05}
-          iridescence={1}
-          iridescenceIOR={1.6}
-          iridescenceThicknessRange={[200, 900]}
-        />
-      </mesh>
-    </Float>
-  );
-}
-
-function Orb({
-  position,
-  radius,
-  color,
-  metal = 0.1,
-  speed = 1,
-}: {
-  position: [number, number, number];
-  radius: number;
-  color: string;
-  metal?: number;
-  speed?: number;
-}) {
-  return (
-    <Float speed={speed * 2} rotationIntensity={0.6} floatIntensity={1.6}>
-      <mesh position={position}>
-        <sphereGeometry args={[radius, 64, 64]} />
-        <meshPhysicalMaterial color={color} metalness={metal} roughness={0.12} clearcoat={1} clearcoatRoughness={0.08} />
-      </mesh>
-    </Float>
-  );
-}
-
-function Ring() {
-  const ref = useRef<Mesh>(null);
-  useFrame((_, dt) => {
-    if (ref.current) ref.current.rotation.z += dt * 0.15;
-  });
-  return (
-    <mesh ref={ref} rotation={[1.2, 0.3, 0]} scale={1}>
-      <torusGeometry args={[2.25, 0.035, 32, 200]} />
-      <meshPhysicalMaterial color="#d7dbff" metalness={0.85} roughness={0.18} clearcoat={1} />
-    </mesh>
-  );
-}
-
-function Rig({ children }: { children: React.ReactNode }) {
+function StillLife() {
   const group = useRef<Group>(null);
+
   useFrame((state) => {
     const g = group.current;
     if (!g) return;
-    g.rotation.y += (state.pointer.x * 0.35 - g.rotation.y) * 0.05;
-    g.rotation.x += (-state.pointer.y * 0.2 - g.rotation.x) * 0.05;
+    const t = state.clock.elapsedTime;
+    const targetY = -0.35 + Math.sin(t * 0.18) * 0.22 + state.pointer.x * 0.25;
+    const targetX = state.pointer.y * -0.06;
+    g.rotation.y += (targetY - g.rotation.y) * 0.04;
+    g.rotation.x += (targetX - g.rotation.x) * 0.04;
   });
-  return <group ref={group}>{children}</group>;
+
+  return (
+    <group ref={group} position={[0, -0.15, 0]}>
+      {/* plinth */}
+      <RoundedBox args={[2.6, 0.45, 2.1]} radius={0.04} smoothness={4} position={[0, -1.12, 0]} castShadow receiveShadow>
+        <meshStandardMaterial {...CLAY_DARK} />
+      </RoundedBox>
+
+      {/* sphere */}
+      <mesh position={[-0.45, -0.02, -0.15]} castShadow receiveShadow>
+        <sphereGeometry args={[0.88, 96, 96]} />
+        <meshStandardMaterial {...CLAY} />
+      </mesh>
+
+      {/* column */}
+      <mesh position={[0.72, 0.18, -0.35]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.3, 0.3, 2.15, 64]} />
+        <meshStandardMaterial {...CLAY} />
+      </mesh>
+
+      {/* ring, leaning against the column */}
+      <mesh position={[0.55, -0.4, 0.55]} rotation={[0.05, -0.6, 0.18]} castShadow receiveShadow>
+        <torusGeometry args={[0.42, 0.13, 48, 96]} />
+        <meshStandardMaterial {...CLAY_DARK} />
+      </mesh>
+
+      {/* the one accent */}
+      <mesh position={[-0.75, -0.69, 0.75]} castShadow receiveShadow>
+        <sphereGeometry args={[0.2, 64, 64]} />
+        <meshStandardMaterial color="#ff4d00" roughness={0.55} />
+      </mesh>
+    </group>
+  );
 }
 
 export default function Scene3D() {
-  // Lighter glass shader on small / touch screens (component is client-only).
-  const [lite] = useState(() => window.matchMedia("(max-width: 768px), (pointer: coarse)").matches);
-
   return (
     <Canvas
-      dpr={[1, lite ? 1.5 : 2]}
-      camera={{ position: [0, 0, 8.6], fov: 35 }}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      shadows="soft"
+      dpr={[1, 2]}
+      camera={{ position: [5.4, 2.7, 7.2], fov: 28 }}
+      onCreated={({ camera }) => camera.lookAt(0, -0.35, 0)}
+      gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
     >
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[4, 6, 5]} intensity={1.6} />
+      <ambientLight intensity={0.55} />
+      <directionalLight
+        position={[-4, 6, 3]}
+        intensity={1.9}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+        shadow-bias={-0.0004}
+        shadow-radius={8}
+        shadow-camera-left={-4}
+        shadow-camera-right={4}
+        shadow-camera-top={4}
+        shadow-camera-bottom={-4}
+      />
 
-      <Rig>
-        <Core lite={lite} />
-        <Ring />
-        <Orb position={[-2.1, 1.25, 0.4]} radius={0.32} color="#0066ff" speed={1.1} />
-        <Orb position={[2.15, -0.95, 0.6]} radius={0.42} color="#ff9f7a" speed={0.9} />
-        <Orb position={[1.75, 1.55, -0.8]} radius={0.2} color="#7c5cff" speed={1.3} />
-        <Orb position={[-1.7, -1.45, 0.9]} radius={0.24} color="#e8e8ed" metal={0.9} speed={1.2} />
-      </Rig>
+      <StillLife />
 
-      <ContactShadows position={[0, -2.05, 0]} opacity={0.2} scale={6.5} blur={2.8} far={4} color="#2b2b6b" />
+      <ContactShadows position={[0, -1.52, 0]} opacity={0.28} scale={9} blur={2.4} far={2} color="#3a3428" />
 
-      {/* Studio lighting — no external HDRI needed */}
-      <Environment resolution={256}>
-        <color attach="background" args={["#e9e9f2"]} />
-        <group rotation={[-Math.PI / 3, 0, 1]}>
-          <Lightformer form="circle" intensity={4} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={2} />
-          <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, 1, -1]} scale={2} />
-          <Lightformer form="circle" intensity={2} rotation-y={Math.PI / 2} position={[-5, -1, -1]} scale={2} />
-          <Lightformer form="circle" intensity={2} rotation-y={-Math.PI / 2} position={[10, 1, 0]} scale={8} />
-          <Lightformer form="ring" color="#7c5cff" intensity={6} onUpdate={(self) => self.lookAt(0, 0, 0)} position={[10, 10, 0]} scale={10} />
-          <Lightformer form="rect" color="#ff9f7a" intensity={3} position={[-8, -4, 4]} scale={[6, 2, 1]} onUpdate={(self) => self.lookAt(0, 0, 0)} />
-        </group>
+      <Environment resolution={128}>
+        <color attach="background" args={["#f6f5f2"]} />
+        <Lightformer form="rect" intensity={1.6} position={[-5, 4, 2]} scale={[6, 6, 1]} onUpdate={(s) => s.lookAt(0, 0, 0)} />
+        <Lightformer form="rect" intensity={0.8} color="#fff4ea" position={[5, 2, 4]} scale={[4, 4, 1]} onUpdate={(s) => s.lookAt(0, 0, 0)} />
       </Environment>
     </Canvas>
   );

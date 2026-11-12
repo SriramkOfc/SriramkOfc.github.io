@@ -1,109 +1,88 @@
-import { experience, education } from "@/data/profile";
+import { experience, education, certifications } from "@/data/profile";
+import Section from "./Section";
 import Reveal from "./Reveal";
+
+function Row({ left, title, sub, children }: { left: React.ReactNode; title: string; sub: string; children?: React.ReactNode }) {
+  return (
+    <div className="grid grid-cols-12 gap-x-6 border-b border-rule py-6">
+      <div className="meta col-span-12 mb-2 sm:col-span-3 sm:mb-0 sm:pt-1">{left}</div>
+      <div className="col-span-12 sm:col-span-9">
+        <h3 className="text-[19px] font-medium leading-snug tracking-[-0.015em]">{title}</h3>
+        <p className="mt-0.5 text-[15px] text-grey">{sub}</p>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative bg-white">
-      <div className="mx-auto grid max-w-6xl gap-14 px-6 py-28 md:py-40 lg:grid-cols-12">
-        <div className="lg:col-span-4">
-          <div className="lg:sticky lg:top-32">
-            <Reveal className="text-sm font-semibold text-blue">Experience</Reveal>
-            <Reveal delay={80}>
-              <h2 className="mt-4 text-[clamp(2.4rem,5vw,3.6rem)] font-semibold leading-[1.02] tracking-[-0.04em]">
-                Where I&apos;ve <br className="hidden lg:block" />
-                done the work.
-              </h2>
-            </Reveal>
-            <Reveal delay={160} className="mt-5 max-w-sm text-lg leading-relaxed text-muted">
-              Engineering, QA, data and years of talking to customers — now all pointed at shipping AI.
-            </Reveal>
+    <Section id="experience" index="02" label="Experience">
+      <Reveal>
+        <h2 className="max-w-[18ch] text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.04em]">
+          Engineering, QA, data and a lot of talking to customers.
+        </h2>
+      </Reveal>
 
-            <Reveal delay={220} className="mt-10 hidden space-y-4 lg:block">
-              <div className="text-sm font-semibold text-ink">Education</div>
-              {education.map((e) => (
-                <div key={e.degree} className="rounded-2xl bg-bg p-5">
-                  <div className="text-[15px] font-semibold leading-snug tracking-tight">{e.degree}</div>
-                  <div className="mt-1 text-sm text-muted">{e.school}</div>
-                  <div className="mt-2 text-xs text-faint">
-                    {e.period}
-                    {e.note && ` · ${e.note}`}
+      <div className="mt-14 border-t border-rule">
+        {experience.map((r, i) => (
+          <Reveal key={r.title + r.org} delay={i * 40}>
+            <Row
+              left={
+                <>
+                  {r.period}
+                  {r.current && <span className="ml-2 text-accent">Current</span>}
+                </>
+              }
+              title={`${r.title}, ${r.org}`}
+              sub={`${r.summary} ${r.place}.`}
+            >
+              <ul className="mt-4 space-y-2">
+                {r.points.map((p) => (
+                  <li key={p} className="relative pl-4 text-[15px] leading-relaxed text-ink-2">
+                    <span className="absolute left-0 top-[0.7em] h-px w-2 bg-ink-2" />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </Row>
+          </Reveal>
+        ))}
+      </div>
+
+      <div className="mt-20 grid gap-x-6 gap-y-16 lg:grid-cols-2">
+        <div>
+          <Reveal className="meta mb-4">Education</Reveal>
+          <div className="border-t border-rule">
+            {education.map((e) => (
+              <Reveal key={e.title}>
+                <div className="border-b border-rule py-5">
+                  <div className="meta">{e.period}</div>
+                  <div className="mt-1.5 text-[17px] font-medium leading-snug tracking-[-0.01em]">{e.title}</div>
+                  <div className="mt-0.5 text-[15px] text-grey">
+                    {e.org}
+                    {e.note && `. ${e.note}`}
                   </div>
                 </div>
-              ))}
-            </Reveal>
+              </Reveal>
+            ))}
           </div>
         </div>
-
-        <ol className="relative space-y-4 lg:col-span-8">
-          {experience.map((r, i) => (
-            <Reveal as="li" key={r.title + r.org} delay={i * 60}>
-              <article
-                className={`group relative overflow-hidden rounded-[28px] p-7 transition-all duration-500 sm:p-9 ${
-                  r.current
-                    ? "bg-gradient-to-br from-[#f3f6ff] via-white to-[#f6f2ff] shadow-[0_1px_2px_rgba(0,0,0,0.04),0_24px_60px_-28px_rgba(0,102,255,0.45)] ring-1 ring-blue/15"
-                    : "bg-bg hover:bg-[#efeff3]"
-                }`}
-              >
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2 text-sm text-muted">
-                      {r.period}
-                      {r.current && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#34c759]/12 px-2.5 py-0.5 text-xs font-medium text-[#1f9d45]">
-                          <span className="h-1.5 w-1.5 rounded-full bg-[#34c759]" />
-                          Now
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="mt-2 text-2xl font-semibold tracking-[-0.025em] sm:text-[1.7rem]">{r.title}</h3>
-                    <div className="mt-1 text-[15px] text-ink-2">
-                      <span className="font-medium">{r.org}</span>
-                      <span className="text-faint"> · {r.place}</span>
-                    </div>
-                  </div>
-                  <span className="text-5xl font-semibold tracking-[-0.05em] text-black/[0.06] transition-colors group-hover:text-black/[0.1] sm:text-6xl">
-                    {r.start}
-                  </span>
+        <div>
+          <Reveal className="meta mb-4">Certifications</Reveal>
+          <div className="border-t border-rule">
+            {certifications.map((c) => (
+              <Reveal key={c.title}>
+                <div className="border-b border-rule py-5">
+                  <div className="meta">{c.year}</div>
+                  <div className="mt-1.5 text-[17px] font-medium leading-snug tracking-[-0.01em]">{c.title}</div>
+                  <div className="mt-0.5 text-[15px] text-grey">{c.org}</div>
                 </div>
-
-                <ul className="mt-6 space-y-2.5">
-                  {r.points.map((p) => (
-                    <li key={p} className="flex gap-3 text-[15px] leading-relaxed text-ink-2">
-                      <span className="mt-[0.62em] h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-br from-blue to-violet" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-
-                {r.tags && (
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {r.tags.map((t) => (
-                      <span key={t} className="rounded-full bg-white px-3 py-1 text-xs font-medium text-muted shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </article>
-            </Reveal>
-          ))}
-
-          {/* education (mobile/tablet) */}
-          <Reveal as="li" className="space-y-4 pt-8 lg:hidden">
-            <div className="text-sm font-semibold">Education</div>
-            {education.map((e) => (
-              <div key={e.degree} className="rounded-2xl bg-bg p-5">
-                <div className="text-[15px] font-semibold leading-snug tracking-tight">{e.degree}</div>
-                <div className="mt-1 text-sm text-muted">{e.school}</div>
-                <div className="mt-2 text-xs text-faint">
-                  {e.period}
-                  {e.note && ` · ${e.note}`}
-                </div>
-              </div>
+              </Reveal>
             ))}
-          </Reveal>
-        </ol>
+          </div>
+        </div>
       </div>
-    </section>
+    </Section>
   );
 }

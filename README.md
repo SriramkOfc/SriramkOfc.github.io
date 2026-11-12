@@ -1,6 +1,6 @@
 # sriramkofc.github.io
 
-Personal website of Sriram Karthikeyan — AI Engineer, Sydney.
+Personal website of Sriram Karthikeyan, AI Engineer in Sydney.
 
 - Next.js (static export) + Tailwind CSS v4
 - Original 3D hero scene built with three.js / react-three-fiber

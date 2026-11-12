@@ -1,20 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sans = Instrument_Sans({
+  variable: "--font-instrument-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
-const title = "Sriram Karthikeyan — AI Engineer";
+const title = "Sriram Karthikeyan, AI Engineer";
 const description =
-  "AI Engineer in Sydney shipping LLM apps, RAG and agents in production fintech. Python · LangGraph · Azure.";
+  "AI Engineer in Sydney. I build LLM features, RAG and agents for a fintech platform used by licensed financial advisers.";
 
 export const metadata: Metadata = {
   title,
@@ -25,13 +26,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5f5f7",
+  themeColor: "#f6f5f2",
   colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable} antialiased`}>
       <body className="min-h-screen overflow-x-clip">{children}</body>
     </html>
   );

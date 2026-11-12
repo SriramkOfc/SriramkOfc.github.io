@@ -1,83 +1,67 @@
 import { profile } from "@/data/profile";
+import Section from "./Section";
 import Reveal from "./Reveal";
-import { ArrowUpRight, GitHubIcon, LinkedInIcon, MailIcon } from "./Icons";
+
+const links = [
+  { label: "LinkedIn", value: profile.linkedinLabel, href: profile.linkedin },
+  { label: "GitHub", value: profile.githubLabel, href: profile.github },
+  { label: "Location", value: "Sydney, Australia", href: "" },
+];
 
 export default function Contact() {
   return (
-    <section id="contact" className="mx-auto max-w-6xl px-4 pb-10 pt-28 sm:px-6 md:pt-40">
-      <Reveal>
-        <div className="relative overflow-hidden rounded-[40px] bg-ink px-6 py-20 text-center text-white sm:px-12 md:py-28">
-          {/* glossy orbs (CSS 3D) */}
-          <div
-            aria-hidden
-            className="floaty absolute -left-10 top-10 h-40 w-40 rounded-full opacity-90 sm:h-56 sm:w-56"
-            style={{
-              background: "radial-gradient(circle at 32% 28%, #fff 0 6%, #9db4ff 22%, #0066ff 55%, #0a1a66 100%)",
-              boxShadow: "0 40px 80px -20px rgba(0,102,255,0.6)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="floaty absolute -bottom-16 -right-8 h-48 w-48 rounded-full opacity-90 sm:h-72 sm:w-72"
-            style={{
-              ["--fd" as string]: "1.5s",
-              background: "radial-gradient(circle at 30% 28%, #fff 0 5%, #d9ccff 20%, #7c5cff 55%, #2a1466 100%)",
-              boxShadow: "0 40px 80px -20px rgba(124,92,255,0.6)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="floaty absolute right-[18%] top-10 h-12 w-12 rounded-full"
-            style={{
-              ["--fd" as string]: "0.7s",
-              background: "radial-gradient(circle at 32% 28%, #fff 0 8%, #ffd2c0 25%, #ff9f7a 60%, #a3462a 100%)",
-            }}
-          />
+    <>
+      <Section id="contact" index="04" label="Contact">
+        <Reveal>
+          <h2 className="max-w-[16ch] text-[clamp(2.5rem,6vw,4.75rem)] font-medium leading-[1] tracking-[-0.045em]">
+            Hiring for AI engineering? I&apos;d like to hear about it.
+          </h2>
+        </Reveal>
 
-          <div className="relative">
-            <p className="text-sm font-medium text-white/60">Contact</p>
-            <h2 className="mx-auto mt-5 max-w-3xl text-[clamp(2.6rem,7vw,5.5rem)] font-semibold leading-[0.98] tracking-[-0.045em]">
-              Let&apos;s build something <span className="text-gradient">that ships.</span>
-            </h2>
-            <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-white/65">
-              Hiring for AI engineering, or need an LLM feature that holds up in production? I&apos;d love to hear about it.
-            </p>
+        <Reveal delay={80} className="mt-12">
+          <a
+            href={`mailto:${profile.email}`}
+            className="link text-[clamp(1.4rem,3.4vw,2.4rem)] tracking-[-0.02em]"
+          >
+            {profile.email}
+          </a>
+        </Reveal>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href={`mailto:${profile.email}`}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-[15px] font-semibold text-ink transition-transform hover:scale-[1.03]"
-              >
-                <MailIcon /> {profile.email}
-              </a>
-              <a
-                href={profile.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-4 text-[15px] font-medium transition-colors hover:bg-white/10"
-              >
-                <LinkedInIcon /> LinkedIn <ArrowUpRight className="h-3.5 w-3.5 opacity-60" />
-              </a>
-              <a
-                href={profile.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-4 text-[15px] font-medium transition-colors hover:bg-white/10"
-              >
-                <GitHubIcon /> GitHub <ArrowUpRight className="h-3.5 w-3.5 opacity-60" />
-              </a>
-            </div>
-          </div>
+        <div className="mt-16 grid border-t border-rule sm:grid-cols-3">
+          {links.map((l, i) => (
+            <Reveal key={l.label} delay={i * 60}>
+              {(() => {
+                const cls = `group flex items-baseline justify-between border-b border-rule py-5 sm:border-b-0 ${
+                  i > 0 ? "sm:border-l sm:pl-6" : ""
+                } ${i < 2 ? "sm:pr-6" : ""}`;
+                const body = (
+                  <span>
+                    <span className="meta block">{l.label}</span>
+                    <span className="mt-1 block text-[15px] transition-colors group-hover:text-accent">{l.value}</span>
+                  </span>
+                );
+                return l.href ? (
+                  <a href={l.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                    {body}
+                    <span aria-hidden className="text-grey transition-transform group-hover:translate-x-0.5 group-hover:text-accent">
+                      →
+                    </span>
+                  </a>
+                ) : (
+                  <div className={cls}>{body}</div>
+                );
+              })()}
+            </Reveal>
+          ))}
         </div>
-      </Reveal>
+      </Section>
 
-      <footer className="flex flex-col items-center justify-between gap-3 px-2 pt-10 text-sm text-faint sm:flex-row">
-        <span>© 2026 {profile.name}</span>
-        <span>{profile.location}</span>
-        <a href="#top" className="transition-colors hover:text-ink">
-          Back to top ↑
-        </a>
+      <footer className="mx-auto max-w-[1200px] px-5 sm:px-8">
+        <div className="meta flex flex-col gap-2 border-t border-rule py-6 sm:flex-row sm:justify-between">
+          <span>© 2026 {profile.name}</span>
+          <span>Built with Next.js and three.js</span>
+        </div>
       </footer>
-    </section>
+    </>
   );
 }
