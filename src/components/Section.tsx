@@ -1,26 +1,40 @@
 import type { ReactNode } from "react";
 import Reveal from "./Reveal";
 
-/** Shared section frame: index + label in cols 1–3, content in cols 4–12. */
+/**
+ * Every section uses this frame so headings and spacing are identical:
+ *   number + H2 on the left, optional intro on the right, then content 64px below.
+ */
 export default function Section({
   id,
   index,
-  label,
+  title,
+  intro,
+  tone = "paper",
   children,
 }: {
   id: string;
   index: string;
-  label: string;
+  title: string;
+  intro?: string;
+  tone?: "paper" | "white";
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="mx-auto max-w-[1200px] px-5 sm:px-8">
-      <div className="grid grid-cols-12 gap-x-6 border-t border-rule pb-24 pt-6 md:pb-36">
-        <Reveal className="col-span-12 mb-10 flex gap-6 md:col-span-3 md:mb-0">
-          <span className="meta">{index}</span>
-          <span className="meta !text-ink">{label}</span>
-        </Reveal>
-        <div className="col-span-12 md:col-span-9">{children}</div>
+    <section id={id} className={tone === "white" ? "bg-white" : ""}>
+      <div className="mx-auto max-w-[1200px] px-5 py-[88px] sm:px-8 md:py-32">
+        <header className="mb-10 grid gap-6 md:mb-16 md:grid-cols-12 md:items-end">
+          <Reveal className="md:col-span-7">
+            <span className="t-small block font-medium text-accent">{index}</span>
+            <h2 className="t-h2 mt-3">{title}</h2>
+          </Reveal>
+          {intro && (
+            <Reveal delay={80} className="t-lead md:col-span-5 md:pb-1">
+              {intro}
+            </Reveal>
+          )}
+        </header>
+        {children}
       </div>
     </section>
   );

@@ -1,16 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Inter, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
-const sans = Instrument_Sans({
-  variable: "--font-instrument-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const mono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["500", "600"],
 });
 
 const title = "Sriram Karthikeyan, AI Engineer";
@@ -26,13 +26,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f5f2",
+  themeColor: "#f7f6f3",
   colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} ${interTight.variable} antialiased`}>
       <body className="min-h-screen overflow-x-clip">{children}</body>
     </html>
   );

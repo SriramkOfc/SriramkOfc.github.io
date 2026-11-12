@@ -2,86 +2,64 @@ import { experience, education, certifications } from "@/data/profile";
 import Section from "./Section";
 import Reveal from "./Reveal";
 
-function Row({ left, title, sub, children }: { left: React.ReactNode; title: string; sub: string; children?: React.ReactNode }) {
-  return (
-    <div className="grid grid-cols-12 gap-x-6 border-b border-rule py-6">
-      <div className="meta col-span-12 mb-2 sm:col-span-3 sm:mb-0 sm:pt-1">{left}</div>
-      <div className="col-span-12 sm:col-span-9">
-        <h3 className="text-[19px] font-medium leading-snug tracking-[-0.015em]">{title}</h3>
-        <p className="mt-0.5 text-[15px] text-grey">{sub}</p>
-        {children}
-      </div>
-    </div>
-  );
-}
-
 export default function Experience() {
   return (
-    <Section id="experience" index="02" label="Experience">
-      <Reveal>
-        <h2 className="max-w-[18ch] text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[1.02] tracking-[-0.04em]">
-          Engineering, QA, data and a lot of talking to customers.
-        </h2>
-      </Reveal>
-
-      <div className="mt-14 border-t border-rule">
+    <Section
+      id="experience"
+      index="02"
+      title="Experience"
+      intro="Engineering, QA, data and a lot of talking to customers, now pointed at AI."
+    >
+      <ol className="border-t border-rule">
         {experience.map((r, i) => (
-          <Reveal key={r.title + r.org} delay={i * 40}>
-            <Row
-              left={
-                <>
+          <Reveal as="li" key={r.title + r.org} delay={i * 40} className="border-b border-rule py-8 md:py-10">
+            <div className="grid gap-4 md:grid-cols-12 md:gap-6">
+              <div className="md:col-span-3">
+                <p className="t-small">
                   {r.period}
-                  {r.current && <span className="ml-2 text-accent">Current</span>}
-                </>
-              }
-              title={`${r.title}, ${r.org}`}
-              sub={`${r.summary} ${r.place}.`}
-            >
-              <ul className="mt-4 space-y-2">
-                {r.points.map((p) => (
-                  <li key={p} className="relative pl-4 text-[15px] leading-relaxed text-ink-2">
-                    <span className="absolute left-0 top-[0.7em] h-px w-2 bg-ink-2" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </Row>
+                  {r.current && <span className="ml-2 font-medium text-accent">Current</span>}
+                </p>
+              </div>
+              <div className="md:col-span-9">
+                <h3 className="t-h3">{r.title}</h3>
+                <p className="mt-1 text-[17px] text-ink">
+                  {r.org}
+                  <span className="text-grey">, {r.place}</span>
+                </p>
+                <ul className="mt-5 space-y-2.5">
+                  {r.points.map((p) => (
+                    <li key={p} className="t-body relative pl-5">
+                      <span className="absolute left-0 top-[0.72em] h-[5px] w-[5px] rounded-full bg-grey/60" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </Reveal>
         ))}
-      </div>
+      </ol>
 
-      <div className="mt-20 grid gap-x-6 gap-y-16 lg:grid-cols-2">
-        <div>
-          <Reveal className="meta mb-4">Education</Reveal>
-          <div className="border-t border-rule">
-            {education.map((e) => (
-              <Reveal key={e.title}>
-                <div className="border-b border-rule py-5">
-                  <div className="meta">{e.period}</div>
-                  <div className="mt-1.5 text-[17px] font-medium leading-snug tracking-[-0.01em]">{e.title}</div>
-                  <div className="mt-0.5 text-[15px] text-grey">
-                    {e.org}
-                    {e.note && `. ${e.note}`}
-                  </div>
-                </div>
-              </Reveal>
-            ))}
+      <div className="mt-20 grid gap-12 md:grid-cols-2 md:gap-6">
+        {[
+          { heading: "Education", items: education.map((e) => ({ k: e.period, t: e.title, s: e.note ? `${e.org}. ${e.note}` : e.org })) },
+          { heading: "Certifications", items: certifications.map((c) => ({ k: c.year, t: c.title, s: c.org })) },
+        ].map((col) => (
+          <div key={col.heading}>
+            <Reveal>
+              <h3 className="t-h3">{col.heading}</h3>
+            </Reveal>
+            <ul className="mt-6 border-t border-rule">
+              {col.items.map((it) => (
+                <Reveal as="li" key={it.t} className="border-b border-rule py-5">
+                  <p className="t-small">{it.k}</p>
+                  <p className="mt-1 text-[17px] font-medium tracking-[-0.01em]">{it.t}</p>
+                  <p className="t-small mt-0.5">{it.s}</p>
+                </Reveal>
+              ))}
+            </ul>
           </div>
-        </div>
-        <div>
-          <Reveal className="meta mb-4">Certifications</Reveal>
-          <div className="border-t border-rule">
-            {certifications.map((c) => (
-              <Reveal key={c.title}>
-                <div className="border-b border-rule py-5">
-                  <div className="meta">{c.year}</div>
-                  <div className="mt-1.5 text-[17px] font-medium leading-snug tracking-[-0.01em]">{c.title}</div>
-                  <div className="mt-0.5 text-[15px] text-grey">{c.org}</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </Section>
   );

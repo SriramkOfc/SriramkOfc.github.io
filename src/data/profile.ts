@@ -26,7 +26,7 @@ export const about = [
 
 export const facts = [
   { label: "In production AI", value: "1.5 years" },
-  { label: "Degrees", value: "M.IT, M.IT Mgmt, B.S. CS" },
+  { label: "Education", value: "USyd and CSUSM" },
   { label: "Dean's List", value: "3 times, CSUSM" },
   { label: "Based in", value: "Sydney" },
 ];

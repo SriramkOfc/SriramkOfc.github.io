@@ -4,43 +4,37 @@ import Reveal from "./Reveal";
 
 export default function About() {
   return (
-    <Section id="about" index="03" label="About">
-      <div className="grid grid-cols-9 gap-x-6">
-        <div className="col-span-9 lg:col-span-6">
+    <Section id="about" index="03" title="About" tone="white">
+      <div className="grid gap-12 md:grid-cols-12 md:gap-6">
+        <div className="md:col-span-7">
           {about.map((p, i) => (
             <Reveal key={i} delay={i * 60}>
-              <p
-                className={
-                  i === 0
-                    ? "text-pretty text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.3] tracking-[-0.02em]"
-                    : "mt-6 text-pretty text-lg leading-[1.6] text-ink-2"
-                }
-              >
-                {p}
-              </p>
+              <p className={i === 0 ? "t-lead !text-ink" : "t-body mt-5"}>{p}</p>
             </Reveal>
           ))}
         </div>
 
-        <dl className="col-span-9 mt-12 grid grid-cols-2 gap-x-6 gap-y-6 self-start lg:col-span-3 lg:col-start-7 lg:mt-1.5 lg:grid-cols-1">
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-6 self-start md:col-span-4 md:col-start-9">
           {facts.map((f) => (
             <Reveal key={f.label}>
-              <dt className="meta">{f.label}</dt>
-              <dd className="mt-1 text-[15px]">{f.value}</dd>
+              <dt className="t-small">{f.label}</dt>
+              <dd className="mt-1 text-[17px] font-medium tracking-[-0.01em]">{f.value}</dd>
             </Reveal>
           ))}
         </dl>
       </div>
 
       <div className="mt-20">
-        <Reveal className="meta mb-4">Skills</Reveal>
-        <div className="grid gap-x-6 border-t border-rule sm:grid-cols-2 lg:grid-cols-5">
+        <Reveal>
+          <h3 className="t-h3">Skills</h3>
+        </Reveal>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {skills.map((g, i) => (
-            <Reveal key={g.group} delay={i * 50} className="border-b border-rule py-6 lg:border-b-0">
-              <h3 className="text-[15px] font-medium">{g.group}</h3>
-              <ul className="mt-3 space-y-1">
+            <Reveal key={g.group} delay={i * 50} className="rounded-2xl bg-paper p-6">
+              <h4 className="text-[15px] font-semibold">{g.group}</h4>
+              <ul className="mt-3 space-y-1.5">
                 {g.items.map((s) => (
-                  <li key={s} className="text-[15px] text-grey">
+                  <li key={s} className="text-[15px] text-ink-2">
                     {s}
                   </li>
                 ))}

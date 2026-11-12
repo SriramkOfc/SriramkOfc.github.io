@@ -4,54 +4,65 @@ import Reveal from "./Reveal";
 
 export default function Work() {
   return (
-    <Section id="work" index="01" label="Selected work">
+    <Section
+      id="work"
+      index="01"
+      title="Selected work"
+      intro="Things I have built outside my day job, and write-ups of the work I do inside it."
+      tone="white"
+    >
+      {/* Featured project */}
       <Reveal>
-        <div className="flex flex-wrap items-baseline justify-between gap-4">
-          <h2 className="text-[clamp(2.75rem,6vw,4.75rem)] font-medium leading-none tracking-[-0.045em]">
-            {offguard.title}
-          </h2>
-          <span className="meta">
-            {offguard.type}, {offguard.year}
-          </span>
-        </div>
-        <p className="mt-6 max-w-[46ch] text-xl leading-[1.45] text-ink-2">{offguard.summary}</p>
+        <article className="rounded-[20px] bg-paper p-6 sm:p-10 md:p-12">
+          <div className="grid gap-8 md:grid-cols-12">
+            <div className="md:col-span-7">
+              <p className="t-small">
+                {offguard.type} · {offguard.year}
+              </p>
+              <h3 className="t-h2 mt-3">{offguard.title}</h3>
+              <p className="t-lead mt-5 max-w-[44ch]">{offguard.summary}</p>
+            </div>
+            <div className="t-small md:col-span-4 md:col-start-9 md:self-end">
+              <p className="font-medium text-ink">Stack</p>
+              <p className="mt-1">{offguard.stack.join(", ")}</p>
+            </div>
+          </div>
+
+          <ol className="mt-10 grid gap-4 sm:grid-cols-3">
+            {offguard.steps.map((s) => (
+              <li key={s.k} className="rounded-2xl bg-white p-6">
+                <span className="t-small font-medium text-accent">{s.k}</span>
+                <h4 className="t-h3 mt-2">{s.title}</h4>
+                <p className="t-body mt-2 !text-[15px]">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </article>
       </Reveal>
 
-      {/* How it works: three hairline columns */}
-      <div className="mt-14 grid border-t border-rule sm:grid-cols-3">
-        {offguard.steps.map((s, i) => (
-          <Reveal
-            key={s.k}
-            delay={i * 80}
-            className={`border-b border-rule py-7 sm:border-b-0 sm:py-8 ${i > 0 ? "sm:border-l sm:pl-6" : ""} ${
-              i < 2 ? "sm:pr-6" : ""
-            }`}
-          >
-            <div className="flex items-baseline justify-between">
-              <span className="text-2xl font-medium tracking-[-0.02em]">{s.title}</span>
-              <span className="meta">{s.k}</span>
-            </div>
-            <p className="mt-3 text-[15px] leading-relaxed text-grey">{s.body}</p>
-          </Reveal>
-        ))}
-      </div>
-      <Reveal className="meta mt-6">Stack: {offguard.stack.join(", ")}</Reveal>
-
       {/* In progress */}
-      <div className="mt-20">
-        <Reveal className="meta mb-4">In progress</Reveal>
-        <ul className="border-t border-rule">
+      <div className="mt-16">
+        <Reveal>
+          <h3 className="t-h3">In progress</h3>
+        </Reveal>
+        <ul className="mt-6 border-t border-rule">
           {upcoming.map((u, i) => (
-            <Reveal as="li" key={u.title} delay={i * 60} className="grid grid-cols-12 gap-x-6 border-b border-rule py-5">
-              <span className="col-span-12 text-[17px] leading-snug sm:col-span-8">{u.title}</span>
-              <span className="meta col-span-6 mt-2 sm:col-span-2 sm:mt-0.5">{u.note}</span>
-              <span className="meta col-span-6 mt-2 text-right sm:col-span-2 sm:mt-0.5">{u.status}</span>
+            <Reveal
+              as="li"
+              key={u.title}
+              delay={i * 60}
+              className="flex flex-col gap-1 border-b border-rule py-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <span className="text-[17px] font-medium tracking-[-0.01em]">{u.title}</span>
+              <span className="t-small shrink-0">
+                {u.note} · {u.status}
+              </span>
             </Reveal>
           ))}
         </ul>
-        <Reveal className="mt-6 text-[15px]">
-          Code and experiments on{" "}
-          <a href={profile.github} target="_blank" rel="noopener noreferrer" className="link">
+        <Reveal className="t-body mt-6">
+          Code and experiments are on{" "}
+          <a href={profile.github} target="_blank" rel="noopener noreferrer" className="link text-ink">
             GitHub
           </a>
           .
