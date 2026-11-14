@@ -2,18 +2,17 @@ import { offguard, upcoming, profile } from "@/data/profile";
 import Section from "./Section";
 import Reveal from "./Reveal";
 
-export default function Work() {
+export default function Projects() {
   return (
     <Section
-      id="work"
-      index="01"
-      title="Selected work"
-      intro="Things I have built outside my day job, and write-ups of the work I do inside it."
-      tone="white"
+      id="projects"
+      index="02"
+      title="Projects"
+      intro="What I build outside my day job, plus write-ups in progress."
     >
       {/* Featured project */}
       <Reveal>
-        <article className="rounded-[20px] bg-paper p-6 sm:p-10 md:p-12">
+        <article className="rounded-[20px] bg-white p-6 sm:p-10 md:p-12">
           <div className="grid gap-8 md:grid-cols-12">
             <div className="md:col-span-7">
               <p className="t-small">
@@ -30,7 +29,7 @@ export default function Work() {
 
           <ol className="mt-10 grid gap-4 sm:grid-cols-3">
             {offguard.steps.map((s) => (
-              <li key={s.k} className="rounded-2xl bg-white p-6">
+              <li key={s.k} className="rounded-2xl bg-paper p-6">
                 <span className="t-small font-medium text-accent">{s.k}</span>
                 <h4 className="t-h3 mt-2">{s.title}</h4>
                 <p className="t-body mt-2 !text-[15px]">{s.body}</p>

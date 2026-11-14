@@ -6,8 +6,9 @@ export default function Experience() {
   return (
     <Section
       id="experience"
-      index="02"
+      index="01"
       title="Experience"
+      tone="white"
       intro="Engineering, QA, data and a lot of talking to customers, now pointed at AI."
     >
       <ol className="border-t border-rule">

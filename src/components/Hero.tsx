@@ -19,8 +19,8 @@ export default function Hero() {
           <div className="md:col-span-4 md:pb-2">
             <p className="t-lead">{intro}</p>
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[15px] font-medium">
-              <a href="#work" className="link">
-                Selected work
+              <a href="#experience" className="link">
+                Experience
               </a>
               <a href={`mailto:${profile.email}`} className="link">
                 Email me
@@ -30,16 +30,12 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Fig. 1: the work, as a diagram */}
-      <figure className="mx-auto max-w-[1200px] px-5 sm:px-8">
+      {/* The work, as a diagram */}
+      <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] bg-white sm:aspect-[16/8] lg:aspect-[21/9]">
           <Scene />
         </div>
-        <figcaption className="t-small mt-4 flex gap-3">
-          <span className="shrink-0 font-medium text-ink">Fig. 1</span>
-          <span className="text-pretty">Messy context in. Grounded, compliance-ready output out, consistent run after run despite non-deterministic models. A simplified view of my work at FinTalkr.</span>
-        </figcaption>
-      </figure>
+      </div>
     </section>
   );
 }

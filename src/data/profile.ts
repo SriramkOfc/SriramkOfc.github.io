@@ -9,9 +9,9 @@ export const profile = {
   location: "Sydney, Australia",
   email: "sriramkofc@gmail.com",
   linkedin: "https://www.linkedin.com/in/sriramkarthikeyan",
-  linkedinLabel: "in/sriramkarthikeyan",
+  linkedinLabel: "linkedin.com/in/sriramkarthikeyan",
   github: "https://github.com/SriramkOfc",
-  githubLabel: "SriramkOfc",
+  githubLabel: "github.com/SriramkOfc",
   workRights: "Full working rights in Australia",
 };
 
