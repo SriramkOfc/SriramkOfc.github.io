@@ -37,7 +37,7 @@ export default function Hero() {
         </div>
         <figcaption className="t-small mt-4 flex gap-3">
           <span className="shrink-0 font-medium text-ink">Fig. 1</span>
-          <span>Context in, accurate output out. A simplified view of the LLM work I do at FinTalkr.</span>
+          <span className="text-pretty">Messy context in. Grounded, compliance-ready output out, consistent run after run despite non-deterministic models. A simplified view of my work at FinTalkr.</span>
         </figcaption>
       </figure>
     </section>

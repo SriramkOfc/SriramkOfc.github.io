@@ -1,7 +1,7 @@
 "use client";
 
-// "Context in, accurate output out." A 3D diagram of the LLM work Sriram does:
-// three context sources feed a model; one answer comes out (the only orange object).
+// A 3D diagram of the LLM work Sriram does, drawn symmetrically:
+// three context sources feed a model, and three production-grade qualities come out (in orange).
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows, Environment, Lightformer, QuadraticBezierLine, RoundedBox } from "@react-three/drei";
@@ -18,17 +18,23 @@ const inputs = [
   { label: "Compliance rules", y: -1.05 },
 ];
 
-const IN_X = -3.7;
-const CORE_X = 0.3;
-const OUT_X = 4.0;
+const outputs = [
+  { label: "Grounded & accurate", y: 1.05 },
+  { label: "Compliance-ready", y: 0 },
+  { label: "Reproducible at scale", y: -1.05 },
+];
+
+const IN_X = -3.9;
+const CORE_X = 0;
+const OUT_X = 3.9;
 
 
 /** Draws a label (and optional "text line" bars) to a canvas texture using the page's Inter font. */
 function useLabelTexture(
   label: string,
-  opts: { w: number; h: number; fg: string; bg: string; bars?: string; size?: number; align?: "left" | "center" },
+  opts: { w: number; h: number; fg: string; bg: string; bars?: string; size?: number; align?: "left" | "center"; check?: string },
 ) {
-  const { w, h, fg, bg, bars, size = 30, align = "left" } = opts;
+  const { w, h, fg, bg, bars, size = 30, align = "left", check } = opts;
   const [tex, setTex] = useState<CanvasTexture | null>(null);
 
   useEffect(() => {
@@ -48,16 +54,37 @@ function useLabelTexture(
         ctx.fillRect(0, 0, c.width, c.height);
       }
       const pad = 38;
+      let textX = pad;
+      if (check) {
+        // Small white badge with a tick, so every output reads as "verified".
+        const r = 15;
+        const cx = pad + r;
+        const cy = c.height * 0.5;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = check;
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        ctx.moveTo(cx - 7, cy + 0.5);
+        ctx.lineTo(cx - 2, cy + 5.5);
+        ctx.lineTo(cx + 7.5, cy - 5);
+        ctx.stroke();
+        textX = pad + r * 2 + 16;
+      }
       ctx.fillStyle = fg;
       ctx.font = `600 ${size}px ${family}`;
       ctx.textAlign = align;
-      const x = align === "center" ? c.width / 2 : pad;
+      const x = align === "center" ? c.width / 2 : textX;
       ctx.fillText(label, x, bars ? c.height * 0.46 : c.height * 0.62);
       if (bars) {
         ctx.fillStyle = bars;
         const y = c.height * 0.64;
-        const avail = c.width - pad * 2;
-        let bx = pad;
+        const avail = c.width - textX - pad;
+        let bx = textX;
         [0.5, 0.28, 0.14].forEach((f) => {
           const bw = avail * f;
           ctx.beginPath();
@@ -75,7 +102,7 @@ function useLabelTexture(
       alive = false;
       made?.dispose();
     };
-  }, [label, w, h, fg, bg, bars, size, align]);
+  }, [label, w, h, fg, bg, bars, size, align, check]);
 
   return tex;
 }
@@ -99,6 +126,8 @@ function Card({
     fg: accent ? "#ffffff" : "#111111",
     bg: accent ? ORANGE : "#ffffff",
     bars: accent ? "rgba(255,255,255,0.55)" : "#ebe8e1",
+    check: accent ? ORANGE : undefined,
+    size: 29,
   });
   useFrame((s) => {
     if (ref.current) ref.current.position.y = position[1] + Math.sin(s.clock.elapsedTime * 0.9 + seed) * 0.04;
@@ -161,9 +190,9 @@ type Layout = {
   inputs: [number, number, number][];
   core: [number, number, number];
   coreLabel: [number, number, number];
-  out: [number, number, number];
+  outs: [number, number, number][];
   curvesIn: QuadraticBezierCurve3[];
-  curveOut: QuadraticBezierCurve3;
+  curvesOut: QuadraticBezierCurve3[];
   shadowY: number;
   frame: { w: number; h: number; cx: number; cy: number };
 };
@@ -176,27 +205,30 @@ function makeLayout(vertical: boolean): Layout {
       inputs: inputs.map((c) => [IN_X, c.y, 0]),
       core: [CORE_X, 0, 0],
       coreLabel: [0, -1.32, 0],
-      out: [OUT_X, 0, 0],
+      outs: outputs.map((c) => [OUT_X, c.y, 0]),
       curvesIn: inputs.map(
         (c) => new QuadraticBezierCurve3(v(IN_X + 1.15, c.y), v((IN_X + CORE_X) / 2, c.y * 0.35), v(CORE_X - 0.85, 0)),
       ),
-      curveOut: new QuadraticBezierCurve3(v(CORE_X + 0.85, 0), v(2.4, 0), v(OUT_X - 1.15, 0)),
+      // Exact mirror of the inputs.
+      curvesOut: outputs.map(
+        (c) => new QuadraticBezierCurve3(v(CORE_X + 0.85, 0), v((OUT_X + CORE_X) / 2, c.y * 0.35), v(OUT_X - 1.15, c.y)),
+      ),
       shadowY: -1.75,
-      frame: { w: 11.2, h: 4.4, cx: 0, cy: -0.1 },
+      frame: { w: 11.6, h: 4.4, cx: 0, cy: -0.1 },
     };
   }
-  // Portrait (phones): inputs stacked on top, model in the middle, output at the bottom.
-  const ys = [3.05, 2.15, 1.25];
-  const coreY = -0.75;
+  // Portrait (phones): inputs stacked on top, model in the middle, outputs mirrored below.
+  const ysIn = [3.35, 2.45, 1.55];
+  const ysOut = [-1.55, -2.45, -3.35];
   return {
-    inputs: ys.map((y) => [0, y, 0]),
-    core: [0, coreY, 0],
+    inputs: ysIn.map((y) => [0, y, 0]),
+    core: [0, 0, 0],
     coreLabel: [1.35, 0, 0],
-    out: [0, -2.85, 0],
-    curvesIn: ys.map((y) => new QuadraticBezierCurve3(v(1.15, y), v(1.85, coreY + 0.9), v(0.45, coreY + 0.65))),
-    curveOut: new QuadraticBezierCurve3(v(0, coreY - 0.85), v(0, -1.95), v(0, -2.47)),
-    shadowY: -3.45,
-    frame: { w: 4.6, h: 7.4, cx: 0.3, cy: 0.05 },
+    outs: ysOut.map((y) => [0, y, 0]),
+    curvesIn: ysIn.map((y) => new QuadraticBezierCurve3(v(1.15, y), v(1.85, 0.9), v(0.45, 0.65))),
+    curvesOut: ysOut.map((y) => new QuadraticBezierCurve3(v(0.45, -0.65), v(1.85, -0.9), v(1.15, y))),
+    shadowY: -3.95,
+    frame: { w: 4.4, h: 8.9, cx: 0.25, cy: -0.25 },
   };
 }
 
@@ -226,17 +258,17 @@ function Pipeline({ layout }: { layout: Layout }) {
 
       <Core position={layout.core} labelAt={layout.coreLabel} />
 
-      <QuadraticBezierLine
-        start={layout.curveOut.v0}
-        mid={layout.curveOut.v1}
-        end={layout.curveOut.v2}
-        color={LINE}
-        lineWidth={1.2}
-      />
-      <Packet curve={layout.curveOut} offset={0} color={ORANGE} />
-      <Packet curve={layout.curveOut} offset={0.5} color={ORANGE} />
+      {layout.curvesOut.map((c, i) => (
+        <group key={`o${i}`}>
+          <QuadraticBezierLine start={c.v0} mid={c.v1} end={c.v2} color={LINE} lineWidth={1.2} />
+          <Packet curve={c} offset={i * 0.33 + 0.15} color={ORANGE} />
+          <Packet curve={c} offset={i * 0.33 + 0.65} color={ORANGE} />
+        </group>
+      ))}
 
-      <Card position={layout.out} label="Accurate output" accent />
+      {outputs.map((c, i) => (
+        <Card key={c.label} position={layout.outs[i]} label={c.label} accent />
+      ))}
     </group>
   );
 }
