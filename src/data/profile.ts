@@ -130,7 +130,37 @@ export const skills = [
   { group: "Tools", items: ["Claude Code", "Cursor", "Make.com", "HubSpot", "Agile / Scrum"] },
 ];
 
-export const offguard = {
+type Project = {
+  title: string;
+  year: string;
+  type: string;
+  summary: string;
+  steps: { k: string; title: string; body: string }[];
+  stack: string[];
+  links?: { label: string; href: string }[];
+  note?: string;
+};
+
+export const fraudBoard: Project = {
+  title: "Fraud Case Board",
+  year: "2026",
+  type: "Live demo",
+  summary:
+    "A case board for fraud analysts with an AI copilot. The AI triages and drafts, the analyst approves, and every change is written to an audit trail.",
+  steps: [
+    { k: "01", title: "Triage", body: "Cases carry an alert type and risk level, with open exposure tracked across the board." },
+    { k: "02", title: "Approve", body: "AI changes arrive as a proposal. Nothing is saved until an analyst applies it." },
+    { k: "03", title: "Audit", body: "Every change, human or AI, is logged with who made it and when. The log is append-only." },
+  ],
+  stack: ["Next.js", "FastAPI", "SQLite", "OpenRouter", "Docker"],
+  links: [
+    { label: "Open live demo", href: "https://fraud-case-board.onrender.com" },
+    { label: "View code", href: "https://github.com/SriramkOfc/fraud-case-board" },
+  ],
+  note: "Demo login: user / password. All data is fictional. The free server can take up to a minute to wake up.",
+};
+
+export const offguard: Project = {
   title: "Offguard",
   year: "2026",
   type: "Independent project",

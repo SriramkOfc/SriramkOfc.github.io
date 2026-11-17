@@ -1,4 +1,4 @@
-import { offguard, upcoming, profile } from "@/data/profile";
+import { fraudBoard, offguard, upcoming, profile } from "@/data/profile";
 import Section from "./Section";
 import Reveal from "./Reveal";
 
@@ -10,34 +10,13 @@ export default function Projects() {
       title="Projects"
       intro="What I build outside my day job, plus write-ups in progress."
     >
-      {/* Featured project */}
-      <Reveal>
-        <article className="rounded-[20px] bg-white p-6 sm:p-10 md:p-12">
-          <div className="grid gap-8 md:grid-cols-12">
-            <div className="md:col-span-7">
-              <p className="t-small">
-                {offguard.type} · {offguard.year}
-              </p>
-              <h3 className="t-h2 mt-3">{offguard.title}</h3>
-              <p className="t-lead mt-5 max-w-[44ch]">{offguard.summary}</p>
-            </div>
-            <div className="t-small md:col-span-4 md:col-start-9 md:self-end">
-              <p className="font-medium text-ink">Stack</p>
-              <p className="mt-1">{offguard.stack.join(", ")}</p>
-            </div>
-          </div>
-
-          <ol className="mt-10 grid gap-4 sm:grid-cols-3">
-            {offguard.steps.map((s) => (
-              <li key={s.k} className="rounded-2xl bg-paper p-6">
-                <span className="t-small font-medium text-accent">{s.k}</span>
-                <h4 className="t-h3 mt-2">{s.title}</h4>
-                <p className="t-body mt-2 !text-[15px]">{s.body}</p>
-              </li>
-            ))}
-          </ol>
-        </article>
-      </Reveal>
+      <div className="space-y-6">
+        {[fraudBoard, offguard].map((project) => (
+          <Reveal key={project.title}>
+            <ProjectCard project={project} />
+          </Reveal>
+        ))}
+      </div>
 
       {/* In progress */}
       <div className="mt-16">
@@ -68,5 +47,45 @@ export default function Projects() {
         </Reveal>
       </div>
     </Section>
+  );
+}
+
+function ProjectCard({ project }: { project: typeof offguard }) {
+  return (
+    <article className="rounded-[20px] bg-white p-6 sm:p-10 md:p-12">
+      <div className="grid gap-8 md:grid-cols-12">
+        <div className="md:col-span-7">
+          <p className="t-small">
+            {project.type} · {project.year}
+          </p>
+          <h3 className="t-h2 mt-3">{project.title}</h3>
+          <p className="t-lead mt-5 max-w-[44ch]">{project.summary}</p>
+          {project.links && (
+            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[15px] font-medium">
+              {project.links.map((l) => (
+                <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="link text-ink">
+                  {l.label} ↗
+                </a>
+              ))}
+            </div>
+          )}
+          {project.note && <p className="t-small mt-3 max-w-[52ch]">{project.note}</p>}
+        </div>
+        <div className="t-small md:col-span-4 md:col-start-9 md:self-end">
+          <p className="font-medium text-ink">Stack</p>
+          <p className="mt-1">{project.stack.join(", ")}</p>
+        </div>
+      </div>
+
+      <ol className="mt-10 grid gap-4 sm:grid-cols-3">
+        {project.steps.map((s) => (
+          <li key={s.k} className="rounded-2xl bg-paper p-6">
+            <span className="t-small font-medium text-accent">{s.k}</span>
+            <h4 className="t-h3 mt-2">{s.title}</h4>
+            <p className="t-body mt-2 !text-[15px]">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </article>
   );
 }
