@@ -17,12 +17,22 @@ const title = "Sriram Karthikeyan, AI Engineer";
 const description =
   "AI Engineer in Sydney. I build LLM features, RAG and agents for a fintech platform used by licensed financial advisers.";
 
+const shareDescription =
+  "AI engineer in Sydney building LLM applications, RAG systems and agents. Experience, projects and contact.";
+
 export const metadata: Metadata = {
   title,
   description,
   metadataBase: new URL("https://sriramkofc.github.io"),
-  openGraph: { title, description, type: "website", url: "https://sriramkofc.github.io" },
-  twitter: { card: "summary", title, description },
+  // Link previews (LinkedIn, Slack, X). Image source: scripts/og-image.html
+  openGraph: {
+    title,
+    description: shareDescription,
+    type: "website",
+    url: "https://sriramkofc.github.io/",
+    images: [{ url: "/og-image.png", width: 1200, height: 627, alt: "Sriram Karthikeyan, AI Engineer, Sydney" }],
+  },
+  twitter: { card: "summary_large_image", title, description: shareDescription, images: ["/og-image.png"] },
 };
 
 export const viewport: Viewport = {

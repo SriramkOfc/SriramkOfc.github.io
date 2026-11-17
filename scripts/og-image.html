@@ -1,0 +1,46 @@
+<!-- Source of public/og-image.png (1200x627). Render: open at a 1200x627 viewport and screenshot, e.g. with Playwright. -->
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Inter+Tight:wght@600&display=block" rel="stylesheet">
+<style>
+*{margin:0;box-sizing:border-box}
+body{width:1200px;height:627px;background:#f7f6f3;font-family:Inter,sans-serif;color:#111;position:relative;overflow:hidden}
+.wrap{position:absolute;inset:0;padding:72px 80px;display:flex;flex-direction:column;justify-content:space-between}
+.kicker{font-size:24px;font-weight:500;color:#767676}
+.kicker b{color:#ff4d00;font-weight:500}
+.kicker i{font-style:normal;color:#e2dfd8;margin:0 12px}
+h1{font-family:"Inter Tight",sans-serif;font-weight:600;font-size:112px;line-height:.95;letter-spacing:-.045em;margin-top:28px}
+.line{font-size:32px;color:#3d3d3d;margin-top:30px;letter-spacing:-.01em}
+.foot{display:flex;justify-content:space-between;align-items:flex-end;font-size:22px;color:#767676;border-top:1px solid #e2dfd8;padding-top:22px}
+.foot span:first-child{color:#111;font-weight:500}
+/* the pipeline motif from the site: three inputs, an LLM core, three outputs */
+svg{position:absolute;right:70px;top:92px}
+</style></head><body>
+<svg width="380" height="300" viewBox="0 0 380 300" fill="none">
+  <g stroke="#e2dfd8" stroke-width="2">
+    <path d="M70 50 C130 50,130 150,165 150"/><path d="M70 150 L165 150"/><path d="M70 250 C130 250,130 150,165 150"/>
+  </g>
+  <g stroke="#ff4d00" stroke-width="2">
+    <path d="M215 150 C250 150,250 50,310 50"/><path d="M215 150 L310 150"/><path d="M215 150 C250 150,250 250,310 250"/>
+  </g>
+  <g fill="#fff" stroke="#e2dfd8" stroke-width="2">
+    <rect x="10" y="32" width="60" height="36" rx="9"/><rect x="10" y="132" width="60" height="36" rx="9"/><rect x="10" y="232" width="60" height="36" rx="9"/>
+  </g>
+  <rect x="160" y="120" width="60" height="60" rx="14" fill="#111"/>
+  <text x="190" y="156" text-anchor="middle" font-family="Inter Tight" font-weight="600" font-size="16" fill="#fff">LLM</text>
+  <g fill="#ff4d00">
+    <rect x="310" y="32" width="60" height="36" rx="9"/><rect x="310" y="132" width="60" height="36" rx="9"/><rect x="310" y="232" width="60" height="36" rx="9"/>
+  </g>
+  <g stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M330 50 l7 7 l13 -13"/><path d="M330 150 l7 7 l13 -13"/><path d="M330 250 l7 7 l13 -13"/>
+  </g>
+</svg>
+<div class="wrap">
+  <div>
+    <p class="kicker"><b>AI Engineer</b><i>/</i>Sydney, Australia</p>
+    <h1>Sriram<br>Karthikeyan</h1>
+    <p class="line">LLM applications, RAG and agents</p>
+  </div>
+  <div class="foot"><span>sriramkofc.github.io</span><span>Experience · Projects · Contact</span></div>
+</div>
+</body></html>
