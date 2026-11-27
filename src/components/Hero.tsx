@@ -22,7 +22,7 @@ export default function Hero() {
               <a href="#experience" className="link">
                 Experience
               </a>
-              <a href={`mailto:${profile.email}`} className="link">
+              <a href={`mailto:${profile.email}`} data-goatcounter-click="Hero: Email me" className="link">
                 Email me
               </a>
             </div>

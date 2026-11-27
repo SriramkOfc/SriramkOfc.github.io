@@ -24,6 +24,7 @@ export default function Contact() {
                 href={l.href}
                 target={l.href.startsWith("mailto") ? undefined : "_blank"}
                 rel="noopener noreferrer"
+                data-goatcounter-click={`Contact: ${l.label}`}
                 className="group flex h-full flex-col justify-between gap-10 rounded-2xl bg-white p-6 transition-shadow hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)]"
               >
                 <span className="flex items-center justify-between">

@@ -40,7 +40,13 @@ export default function Projects() {
         </ul>
         <Reveal className="t-body mt-6">
           Code and experiments are on{" "}
-          <a href={profile.github} target="_blank" rel="noopener noreferrer" className="link text-ink">
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-goatcounter-click="Projects: GitHub"
+            className="link text-ink"
+          >
             GitHub
           </a>
           .
@@ -63,7 +69,14 @@ function ProjectCard({ project }: { project: typeof offguard }) {
           {project.links && (
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[15px] font-medium">
               {project.links.map((l) => (
-                <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="link text-ink">
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-goatcounter-click={`${project.title}: ${l.label}`}
+                  className="link text-ink"
+                >
                   {l.label} ↗
                 </a>
               ))}

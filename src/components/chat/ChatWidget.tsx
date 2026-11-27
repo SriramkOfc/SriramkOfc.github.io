@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Face, { type Mood } from "./Face";
 import Markdown from "./Markdown";
+import { track } from "@/lib/track";
 
 const API = process.env.NEXT_PUBLIC_ASK_API ?? "https://sriramkofc-ask-sriram.hf.space";
 const STORE = "ask-sriram-chat-v1";
@@ -76,6 +77,7 @@ export default function ChatWidget() {
   }, [open]);
 
   const openChat = () => {
+    track("ask-sriram-open", "Opened Ask Sriram");
     setOpen(true);
     setTeaser(false);
     try {
@@ -87,6 +89,7 @@ export default function ChatWidget() {
     async (text: string) => {
       const message = text.trim().slice(0, MAX_CHARS);
       if (!message || busy) return;
+      track("ask-sriram-message", "Sent a message to Ask Sriram");
       const history = msgs.filter((m) => m !== GREETING).slice(-12);
       setMsgs((m) => [...m, { role: "user", content: message }]);
       setInput("");

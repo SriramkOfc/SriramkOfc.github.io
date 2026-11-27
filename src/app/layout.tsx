@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Inter_Tight } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,6 +45,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} ${interTight.variable} antialiased`}>
       <body className="min-h-screen overflow-x-clip">{children}</body>
+      {/* Visitor analytics: GoatCounter, cookie-free. Ignores localhost. Dashboard: https://sriramkofc.goatcounter.com */}
+      <Script data-goatcounter="https://sriramkofc.goatcounter.com/count" src="https://gc.zgo.at/count.js" />
     </html>
   );
 }
