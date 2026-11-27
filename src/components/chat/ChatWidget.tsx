@@ -4,8 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Face, { type Mood } from "./Face";
 import Markdown from "./Markdown";
 import { track } from "@/lib/track";
+import { ASK_API } from "@/lib/askApi";
 
-const API = process.env.NEXT_PUBLIC_ASK_API ?? "https://sriramkofc-ask-sriram.hf.space";
+const API = ASK_API;
 const STORE = "ask-sriram-chat-v1";
 const MAX_CHARS = 800;
 
